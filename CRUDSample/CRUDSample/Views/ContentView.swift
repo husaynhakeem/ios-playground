@@ -9,22 +9,26 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var notesRepository: NotesRepository
+    @State var isAddingNote: Bool = false
     
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(notesRepository.notes) { note in
-                    NoteRow(note: note)
+        ZStack(alignment: .bottomTrailing) {
+            NavigationView {
+                if notesRepository.notes.isEmpty {
+                    EmptyNotes()
+                } else {
+                    NotesList()
+                        .navigationTitle("My Notes")
                 }
-                .onMove(perform: { indices, newOffset in
-                    notesRepository.moveNotes(oldOffsets: indices, newOffset: newOffset)
-                })
-                .onDelete(perform: { indexSet in
-                    notesRepository.deleteNotes(atOffsets: indexSet)
-                })
             }
-            .toolbar(content: EditButton.init)
-            .navigationTitle("My Notes")
+            .sheet(isPresented: $isAddingNote) {
+                NewNote()
+            }
+            
+            FloatingActionButton(imageName: "plus") {
+                isAddingNote = true
+            }
+            .padding(.horizontal, 32)
         }
     }
 }

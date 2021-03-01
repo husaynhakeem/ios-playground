@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Note: Hashable, Identifiable {
+class Note: Identifiable {
     let id: UUID
     var content: String
     var lastUpdated: Date
@@ -18,8 +18,14 @@ struct Note: Hashable, Identifiable {
         self.lastUpdated = Date()
     }
     
-    mutating func update(content: String) {
+    func update(content: String) {
         self.content = content
         self.lastUpdated = Date()
+    }
+}
+
+extension Note: ObservableObject {
+    static func == (lhs: Note, rhs: Note) -> Bool {
+        lhs.id == rhs.id
     }
 }

@@ -28,7 +28,7 @@ private struct DateText: View {
     
     var body: some View {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "hh:mm:ss 'on' yyyy-MM-dd"
+        dateFormatter.dateFormat = "MMMM dd, yyyy 'at' hh:mm:ss"
         return Text(dateFormatter.string(from: date))
     }
 }
