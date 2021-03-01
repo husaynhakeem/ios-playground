@@ -9,18 +9,7 @@ import Foundation
 
 final class NotesRepository: ObservableObject {
     
-    @Published var notes: [Note] = [
-        .init(content: "Note 1"),
-        .init(content: "Note 2"),
-        .init(content: "Note 3"),
-        .init(content: "Note 4"),
-        .init(content: "Note 5"),
-        .init(content: "Note 6"),
-        .init(content: "Note 7"),
-        .init(content: "Note 8"),
-        .init(content: "Note 9"),
-        .init(content: "Note 10"),
-    ]
+    @Published var notes: [Note] = []
     
     func addNote(content: String) {
         let newNote = Note(content: content)
@@ -30,13 +19,10 @@ final class NotesRepository: ObservableObject {
     func updateNote(noteId: UUID, content: String) {
         if let index = notes.firstIndex(where: { $0.id == noteId }) {
             // Remove the note to update from the list of notes
-            var noteToUpdate = notes.remove(at: index)
-            
-            // Update the content of the note
-            noteToUpdate.update(content: content)
+            notes.remove(at: index)
             
             // Re-insert note at the top of the list of notes
-            notes.insert(noteToUpdate, at: 0)
+            notes.insert(Note(id: noteId, content: content), at: 0)
         }
     }
     

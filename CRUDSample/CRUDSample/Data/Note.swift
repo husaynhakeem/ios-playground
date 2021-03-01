@@ -12,15 +12,14 @@ class Note: Identifiable {
     var content: String
     var lastUpdated: Date
     
-    init(content: String) {
-        self.id = UUID()
+    init(id: UUID, content: String) {
+        self.id = id
         self.content = content
         self.lastUpdated = Date()
     }
     
-    func update(content: String) {
-        self.content = content
-        self.lastUpdated = Date()
+    convenience init(content: String) {
+        self.init(id: UUID(), content: content)
     }
 }
 

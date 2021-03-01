@@ -8,18 +8,21 @@
 import SwiftUI
 
 struct NoteRow: View {
-    
-    let note: Note
+    @State var note: Note
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8.0) {
-            DateText(date: note.lastUpdated)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-            Text(note.content)
-                .font(.title2)
+        NavigationLink(
+            destination: NoteUpdate(note: note)
+        ) {
+            VStack(alignment: .leading, spacing: 8.0) {
+                DateText(date: note.lastUpdated)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                Text(note.content)
+                    .font(.title2)
+            }
+            .padding()
         }
-        .padding()
     }
 }
 
