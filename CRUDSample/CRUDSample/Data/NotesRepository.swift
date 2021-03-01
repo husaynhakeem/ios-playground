@@ -40,9 +40,11 @@ final class NotesRepository: ObservableObject {
         }
     }
     
-    func deleteNote(noteId: UUID) {
-        if let index = notes.firstIndex(where: { $0.id == noteId }) {
-            notes.remove(at: index)
-        }
+    func moveNotes(oldOffsets: IndexSet, newOffset: Int) {
+        notes.move(fromOffsets: oldOffsets, toOffset: newOffset)
+    }
+    
+    func deleteNotes(atOffsets indexSet: IndexSet) {
+        notes.remove(atOffsets: indexSet)
     }
 }

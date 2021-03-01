@@ -12,9 +12,19 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            List(notesRepository.notes, id: \.self) { note in
-                NoteRow(note: note)
+            List {
+                ForEach(notesRepository.notes) { note in
+                    NoteRow(note: note)
+                }
+                .onMove(perform: { indices, newOffset in
+                    notesRepository.moveNotes(oldOffsets: indices, newOffset: newOffset)
+                })
+                .onDelete(perform: { indexSet in
+                    notesRepository.deleteNotes(atOffsets: indexSet)
+                })
             }
+            .toolbar(content: EditButton.init)
+            .navigationTitle("My Notes")
         }
     }
 }
