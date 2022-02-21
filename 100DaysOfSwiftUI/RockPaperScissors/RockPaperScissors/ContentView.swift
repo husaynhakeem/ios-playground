@@ -16,7 +16,10 @@ struct ContentView: View {
         VStack {
             space(coeff: 3)
             
-            RockPaperScissors(labelPlacement: .top, selected: gameTile)
+            RockPaperScissors(
+                labelPlacement: .top,
+                selectedTile: gameTile,
+                isEnabled: false)
             
             space(coeff: 1)
             
