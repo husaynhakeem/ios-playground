@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var gameTile = TileType.allCases.random()
-    @State private var userTile: TileType? = nil
-    @State private var shouldUserWin: Bool = Bool.random()
+    @State private var game = Game.newInstance()
+    @State private var showAlert = false
+    @State private var alert = Alert()
     
     var body: some View {
         VStack {
@@ -18,7 +18,7 @@ struct ContentView: View {
             
             RockPaperScissors(
                 labelPlacement: .top,
-                selectedTile: gameTile,
+                selectedTile: game.gameTile,
                 isEnabled: false)
             
             space(coeff: 1)
@@ -26,27 +26,32 @@ struct ContentView: View {
             VStack(spacing: 8) {
                 HStack(spacing: 0) {
                     Text("The game played ")
-                    Text(gameTile.rawValue)
+                    Text(game.gameTile.rawValue)
                         .underline()
                 }
                 
                 HStack(spacing: 0) {
                     Text("Play rock, paper or scissors to ")
-                    Text(shouldUserWin ? "win" : "lose")
+                    Text(game.shouldPlayerWin ? "win" : "lose")
                         .underline()
                 }
             }
             
             space(coeff: 1)
             
-            RockPaperScissors(labelPlacement: .bottom)
+            RockPaperScissors(
+                labelPlacement: .bottom,
+                onSelected: onPlayerPlayed)
             
             space(coeff: 3)
         }
-        .onAppear {
-            print("Game tile: \(gameTile)")
-            print("User tile: \(String(describing: userTile))")
-            print("Should user win: \(shouldUserWin)")
+        .alert(alert.title, isPresented: $showAlert) {
+            Button(alert.actionLabel) {
+                game = Game.newInstance()
+                showAlert = false
+            }
+        } message: {
+            Text(alert.message)
         }
     }
     
@@ -55,11 +60,40 @@ struct ContentView: View {
             Spacer()
         }
     }
+    
+    private func onPlayerPlayed(playerTile: TileType) {
+        self.game.playerTile = playerTile
+        
+        let didPlayerWin = self.game.didPlayerWin
+        if didPlayerWin {
+            self.alert = Alert(title: "You win!", message: "Off to the next round", actionLabel: "Continue")
+        } else {
+            self.alert = Alert(title: "You lose!", message: "Off to the next round", actionLabel: "Continue")
+        }
+        
+        self.showAlert = true
+    }
 }
 
 extension Collection {
     func random() -> Element {
         self.shuffled()[Int.random(in: 0..<self.count)]
+    }
+}
+
+struct Alert {
+    let title: String
+    let message: String
+    let actionLabel: String
+    
+    init() {
+        self.init(title: "", message: "", actionLabel: "")
+    }
+    
+    init(title: String, message: String, actionLabel: String) {
+        self.title = title
+        self.message = message
+        self.actionLabel = actionLabel
     }
 }
 

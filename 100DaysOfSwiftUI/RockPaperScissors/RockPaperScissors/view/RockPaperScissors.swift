@@ -17,12 +17,14 @@ struct RockPaperScissors: View {
     }
     private let labelPlacement: LabelPlacement
     private let isEnabled: Bool
+    private let onSelected: (TileType) -> Void
     @State private var selectedTile: TileType?
     
-    init(labelPlacement: LabelPlacement, selectedTile: TileType? = nil, isEnabled: Bool = true) {
+    init(labelPlacement: LabelPlacement, selectedTile: TileType? = nil, isEnabled: Bool = true, onSelected: @escaping (TileType) -> Void = { _ in }) {
         self.labelPlacement = labelPlacement
-        self._selectedTile = State(initialValue: selectedTile)
+        self._selectedTile = State(wrappedValue: selectedTile)
         self.isEnabled = isEnabled
+        self.onSelected = onSelected
     }
     
     var body: some View {
@@ -42,6 +44,7 @@ struct RockPaperScissors: View {
     
     func select(tile: TileData) {
         selectedTile = tile.type
+        onSelected(tile.type)
     }
 }
 
@@ -53,7 +56,10 @@ struct RockPaperScissors_Previews: PreviewProvider {
         ForEach(placements, id: \.self) { placement in
             ForEach(selections, id: \.self) { selection in
                 ForEach(enabled, id: \.self) { isEnabled in
-                    RockPaperScissors(labelPlacement: placement, selectedTile: selection, isEnabled: isEnabled)
+                    RockPaperScissors(
+                        labelPlacement: placement,
+                        selectedTile: selection,
+                        isEnabled: isEnabled) { _ in }
                 }
             }
         }
