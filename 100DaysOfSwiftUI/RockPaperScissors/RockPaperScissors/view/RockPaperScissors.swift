@@ -22,7 +22,9 @@ struct RockPaperScissors: View {
     
     init(labelPlacement: LabelPlacement, selectedTile: TileType? = nil, isEnabled: Bool = true, onSelected: @escaping (TileType) -> Void = { _ in }) {
         self.labelPlacement = labelPlacement
-        self._selectedTile = State(wrappedValue: selectedTile)
+        if let selectedTile = selectedTile {
+            self.selectedTile = selectedTile
+        }
         self.isEnabled = isEnabled
         self.onSelected = onSelected
     }

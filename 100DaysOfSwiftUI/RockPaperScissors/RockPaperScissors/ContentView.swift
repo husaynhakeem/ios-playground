@@ -11,17 +11,22 @@ struct ContentView: View {
     @State private var game = Game.newInstance()
     @State private var showAlert = false
     @State private var alert = Alert()
+    @State private var score = 0
     
     var body: some View {
         VStack {
-            space(coeff: 3)
+            space(coeff: 2)
+            
+            ScoreView(score: score)
+            
+            space()
             
             RockPaperScissors(
                 labelPlacement: .top,
                 selectedTile: game.gameTile,
                 isEnabled: false)
             
-            space(coeff: 1)
+            space()
             
             VStack(spacing: 8) {
                 HStack(spacing: 0) {
@@ -37,13 +42,13 @@ struct ContentView: View {
                 }
             }
             
-            space(coeff: 1)
+            space()
             
             RockPaperScissors(
                 labelPlacement: .bottom,
                 onSelected: onPlayerPlayed)
             
-            space(coeff: 3)
+            space(coeff: 2)
         }
         .alert(alert.title, isPresented: $showAlert) {
             Button(alert.actionLabel) {
@@ -55,7 +60,7 @@ struct ContentView: View {
         }
     }
     
-    private func space(coeff: Int) -> some View {
+    private func space(coeff: Int = 1) -> some View {
         ForEach(0..<coeff, id: \.self) { _ in
             Spacer()
         }
@@ -67,33 +72,13 @@ struct ContentView: View {
         let didPlayerWin = self.game.didPlayerWin
         if didPlayerWin {
             self.alert = Alert(title: "You win!", message: "Off to the next round", actionLabel: "Continue")
+            score += 10
         } else {
             self.alert = Alert(title: "You lose!", message: "Off to the next round", actionLabel: "Continue")
+            score -= 10
         }
         
         self.showAlert = true
-    }
-}
-
-extension Collection {
-    func random() -> Element {
-        self.shuffled()[Int.random(in: 0..<self.count)]
-    }
-}
-
-struct Alert {
-    let title: String
-    let message: String
-    let actionLabel: String
-    
-    init() {
-        self.init(title: "", message: "", actionLabel: "")
-    }
-    
-    init(title: String, message: String, actionLabel: String) {
-        self.title = title
-        self.message = message
-        self.actionLabel = actionLabel
     }
 }
 
