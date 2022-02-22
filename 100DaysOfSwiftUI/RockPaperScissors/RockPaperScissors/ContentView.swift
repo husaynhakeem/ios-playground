@@ -53,7 +53,6 @@ struct ContentView: View {
         .alert(alert.title, isPresented: $showAlert) {
             Button(alert.actionLabel) {
                 game = Game.newInstance()
-                showAlert = false
             }
         } message: {
             Text(alert.message)
@@ -67,18 +66,22 @@ struct ContentView: View {
     }
     
     private func onPlayerPlayed(playerTile: TileType) {
-        self.game.playerTile = playerTile
+        game.playerTile = playerTile
         
-        let didPlayerWin = self.game.didPlayerWin
-        if didPlayerWin {
-            self.alert = Alert(title: "You win!", message: "Off to the next round", actionLabel: "Continue")
-            score += 10
-        } else {
-            self.alert = Alert(title: "You lose!", message: "Off to the next round", actionLabel: "Continue")
-            score -= 10
+        let didPlayerWin = game.didPlayerWin
+        score = didPlayerWin ? score + 10 : score - 10
+        
+        let startOver = Game.gamesCount == Game.MAX_ROUNDS
+        alert = Alert(
+            title: didPlayerWin ? "You win!" : "You lose!",
+            message: startOver ? "Your final score is \(score)" : "Off to the next round",
+            actionLabel: startOver ? "Start new game" : "Continue")
+        showAlert = true
+        
+        if startOver {
+            Game.gamesCount = 0
+            score = 0
         }
-        
-        self.showAlert = true
     }
 }
 

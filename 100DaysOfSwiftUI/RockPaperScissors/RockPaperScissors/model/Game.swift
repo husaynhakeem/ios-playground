@@ -18,6 +18,9 @@ struct Game {
         .scissors: .paper
     ]
     
+    static let MAX_ROUNDS = 10
+    static var gamesCount = 0
+    
     let gameTile: TileType
     let shouldPlayerWin: Bool
     
@@ -35,9 +38,10 @@ struct Game {
     init(gameTile: TileType, shouldPlayerWin: Bool) {
         self.gameTile = gameTile
         self.shouldPlayerWin = shouldPlayerWin
+        Game.gamesCount += 1
     }
     
     static func newInstance() -> Game {
-        Game(gameTile: TileType.allCases.random(), shouldPlayerWin: Bool.random())
+        return Game(gameTile: TileType.allCases.random(), shouldPlayerWin: Bool.random())
     }
 }
