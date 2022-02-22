@@ -23,8 +23,8 @@ struct ContentView: View {
             
             RockPaperScissors(
                 labelPlacement: .top,
-                selectedTile: game.gameTile,
-                isEnabled: false)
+                isEnabled: false,
+                selectedTile: .constant(game.gameTile))
             
             space()
             
@@ -46,7 +46,8 @@ struct ContentView: View {
             
             RockPaperScissors(
                 labelPlacement: .bottom,
-                onSelected: onPlayerPlayed)
+                onSelected: onPlayerPlayed,
+                selectedTile: .constant(game.playerTile))
             
             space(coeff: 2)
         }

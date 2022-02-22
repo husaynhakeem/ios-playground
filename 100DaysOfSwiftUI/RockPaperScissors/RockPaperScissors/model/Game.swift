@@ -21,7 +21,7 @@ struct Game {
     static let MAX_ROUNDS = 10
     static var gamesCount = 0
     
-    let gameTile: TileType
+    var gameTile: TileType
     let shouldPlayerWin: Bool
     
     var playerTile: TileType? = nil
